@@ -1,0 +1,28 @@
+version: '3.7'
+networks:
+  ws:
+services:
+  ws-bridge:
+    build: bridge
+    container_name: ws-bridge
+    restart: always
+    networks:
+      - ws
+  ws-db:
+    image: influxdb:latest
+    networks:
+      - ws
+    container_name: ws-db
+    restart: always
+    volumes:
+      - .:/var/lib/influxdb
+    ports:
+      - 8086:8086
+  ws-grafana:
+    image: grafana/grafana:latest
+    networks:
+      - ws
+    container_name: ws-grafana
+    restart: always
+    ports:
+      - 3000:3000
